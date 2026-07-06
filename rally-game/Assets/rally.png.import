@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxekqti665sur"
-path="res://.godot/imported/Gemini_Generated_Image_kd9024kd9024kd90.png-64dc222a9e9f1135f09c869c22fb0d1a.ctex"
+uid="uid://de2bqml0pa0a6"
+path="res://.godot/imported/rally.png-a85a1a8c530a33e9c0602d26c21c15c3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Gemini_Generated_Image_kd9024kd9024kd90.png"
-dest_files=["res://.godot/imported/Gemini_Generated_Image_kd9024kd9024kd90.png-64dc222a9e9f1135f09c869c22fb0d1a.ctex"]
+source_file="res://Assets/rally.png"
+dest_files=["res://.godot/imported/rally.png-a85a1a8c530a33e9c0602d26c21c15c3.ctex"]
 
 [params]
 

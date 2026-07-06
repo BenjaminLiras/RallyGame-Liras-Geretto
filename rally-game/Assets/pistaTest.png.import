@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://de2bqml0pa0a6"
-path="res://.godot/imported/Gemini_Generated_Image_7wk0lr7wk0lr7wk0.png-00447923c41eac32a843d6712ad2aa63.ctex"
+uid="uid://bwpn48adbhvsg"
+path="res://.godot/imported/pistaTest.png-bf607a6d980c04095c7dca10fa094cef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Gemini_Generated_Image_7wk0lr7wk0lr7wk0.png"
-dest_files=["res://.godot/imported/Gemini_Generated_Image_7wk0lr7wk0lr7wk0.png-00447923c41eac32a843d6712ad2aa63.ctex"]
+source_file="res://Assets/pistaTest.png"
+dest_files=["res://.godot/imported/pistaTest.png-bf607a6d980c04095c7dca10fa094cef.ctex"]
 
 [params]
 
