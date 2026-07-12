@@ -15,6 +15,9 @@ _data = {
 }
 point_count = 10
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_50glp"]
+size = Vector2(50.207657, 23.218231)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_idj7w"]
 texture = ExtResource("1_r150o")
 0:0/0 = 0
@@ -4082,7 +4085,7 @@ texture = ExtResource("1_r150o")
 sources/0 = SubResource("TileSetAtlasSource_idj7w")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v1gob"]
-size = Vector2(12, 8.59227)
+size = Vector2(24, 18.412054)
 
 [node name="Main" type="Node2D" unique_id=1112573599]
 
@@ -4106,6 +4109,14 @@ texture = ExtResource("1_idj7w")
 
 [node name="Camera2D" type="Camera2D" parent="Stage/prota" unique_id=1406799336]
 
+[node name="Area2D" type="Area2D" parent="Stage/prota" unique_id=1037618022]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Stage/prota/Area2D" unique_id=1854021665]
+visibility_layer = 3
+position = Vector2(0.7088623, -1.3460999)
+scale = Vector2(1.0000006, 1.0000002)
+shape = SubResource("RectangleShape2D_50glp")
+
 [node name="Car2" type="PathFollow2D" parent="Stage" unique_id=64367212]
 position = Vector2(13.204809, 645.23303)
 rotation = -0.94387853
@@ -4128,13 +4139,15 @@ position = Vector2(347.99997, 432.0687)
 script = ExtResource("7_50glp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Stage/Area2D" unique_id=1416190115]
-position = Vector2(2.3841858e-07, -5.1259995e-06)
-scale = Vector2(0.9999999, 0.99999964)
+light_mask = 2
+visibility_layer = 0
+position = Vector2(-1.5, 0)
+scale = Vector2(0.9999999, 0.9999992)
 shape = SubResource("RectangleShape2D_v1gob")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=389847894]
 
-[node name="Control" parent="CanvasLayer" unique_id=1473257797 instance=ExtResource("7_jw32o")]
+[node name="Cartel" parent="CanvasLayer" unique_id=1473257797 instance=ExtResource("7_jw32o")]
 visible = false
 
 [connection signal="body_entered" from="Stage/Area2D" to="Stage" method="_on_area_2d_body_entered"]

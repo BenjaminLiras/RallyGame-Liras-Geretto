@@ -1,5 +1,5 @@
 extends PathFollow2D
-@export var velocidad: float = 250
+@export var velocidad: float = 300
 @export var avanzando: bool = true
 @export var calculo_velocidad: float = 1.0
 
