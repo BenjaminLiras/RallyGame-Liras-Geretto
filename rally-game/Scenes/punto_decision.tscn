@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://df7yvn77qsl38"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tbgt2"]
+size = Vector2(62, 62)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_auu1u"]
+
+[node name="PuntoDecision" type="Area2D" unique_id=394585661]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=341009903]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_tbgt2")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1817032483]
+position = Vector2(4.7683716e-07, 4.7683716e-07)
+scale = Vector2(63.125, 63.125)
+texture = SubResource("CanvasTexture_auu1u")

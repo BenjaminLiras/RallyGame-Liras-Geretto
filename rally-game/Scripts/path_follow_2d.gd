@@ -6,7 +6,7 @@ extends PathFollow2D
 
 @onready var menu_decision = $"../../CanvasLayer/Cartel"
 
-var _curva_actual: Area2D = null
+var curva_actual: Area2D = null
 
 
 func _ready() -> void:
@@ -24,26 +24,31 @@ func _process(delta: float) -> void:
 	
 
 func _on_zona_curva_detectada(area: Area2D) -> void:
-	if _curva_actual == null:
-		_curva_actual = area
+	if "Acelerar" in area.name:
+		calculo_velocidad = 1.5
+		return
+	if curva_actual == null:
+		curva_actual = area
 		avanzando = false
 		menu_decision.visible = true
 	
 
 func tomar_decision(modificador_velocidad: float) -> void:
 	calculo_velocidad = modificador_velocidad
-	_curva_actual = null
+	curva_actual = null
 	avanzando = true
 	menu_decision.visible = false
 
 
 func _on_acelerar() -> void:
 	tomar_decision(1.3)
-
+	
+	
 
 func _on_frenar() -> void:
 	tomar_decision(0.7)
-
+	
 
 func _on_segunda() -> void:
 	tomar_decision(0.5)
+	
