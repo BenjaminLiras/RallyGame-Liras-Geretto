@@ -3,11 +3,12 @@ extends PathFollow2D
 @export var velocidad: float = 300
 @export var avanzando: bool = true
 @export var calculo_velocidad: float = 1.0
+@export var danio: float = 100
 
 @onready var menu_decision = $"../../CanvasLayer/Cartel"
 
 var curva_actual: Area2D = null
-
+var penalizacion_danio: float = 0
 
 func _ready() -> void:
 	loop = true
@@ -42,11 +43,13 @@ func tomar_decision(modificador_velocidad: float) -> void:
 
 func _on_acelerar() -> void:
 	tomar_decision(1.3)
+	danio -= 10
 	
 	
 
 func _on_frenar() -> void:
 	tomar_decision(0.7)
+	danio -= 5
 	
 
 func _on_segunda() -> void:

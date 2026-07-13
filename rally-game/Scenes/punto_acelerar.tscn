@@ -1,17 +1,16 @@
 [gd_scene format=3 uid="uid://d2yycd2w8ixb2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7y7ei"]
-size = Vector2(113, 102)
+size = Vector2(68, 68)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_7y7ei"]
 
 [node name="PuntoAcelerar" type="Area2D" unique_id=1319333475]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1320333793]
-position = Vector2(1.5, 0)
 shape = SubResource("RectangleShape2D_7y7ei")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1175244054]
 modulate = Color(0, 0.51445556, 0.0067818156, 1)
-scale = Vector2(115.5, 106.5)
+scale = Vector2(70.37501, 68.125)
 texture = SubResource("CanvasTexture_7y7ei")

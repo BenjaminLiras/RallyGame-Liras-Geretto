@@ -4142,7 +4142,7 @@ scale = Vector2(1.4999999, 1.2274678)
 position = Vector2(505.50006, 401.38196)
 
 [node name="PuntoDecision5" parent="Stage" unique_id=1797419483 instance=ExtResource("7_50glp")]
-position = Vector2(1042.4999, 99.42489)
+position = Vector2(1104, 115.38197)
 
 [node name="PuntoDecision7" parent="Stage" unique_id=531534349 instance=ExtResource("7_50glp")]
 position = Vector2(1158, 436.97858)
@@ -4153,6 +4153,12 @@ scale = Vector2(1.4999999, 1.2274678)
 
 [node name="PuntoAcelerar2" parent="Stage" unique_id=1358525452 instance=ExtResource("9_vy5pj")]
 position = Vector2(615, 341.23608)
+
+[node name="PuntoAcelerar3" parent="Stage" unique_id=1328371678 instance=ExtResource("9_vy5pj")]
+position = Vector2(1162.4999, 206.2146)
+
+[node name="PuntoAcelerar4" parent="Stage" unique_id=1005720967 instance=ExtResource("9_vy5pj")]
+position = Vector2(1277.9999, 537.6309)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=389847894]
 
