@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://emnsnpbr3ehj"]
+
+[ext_resource type="Script" uid="uid://ceyd6suhdlq1t" path="res://main_menu.gd" id="1_06t4h"]
+
+[node name="MainMenu" type="Node2D" unique_id=922893540]
+script = ExtResource("1_06t4h")
+
+[node name="Button_Manager" type="Control" parent="." unique_id=1029955796]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Jugar" type="Button" parent="Button_Manager" unique_id=360732948]
+layout_mode = 0
+offset_left = 445.0
+offset_top = 242.0
+offset_right = 575.0
+offset_bottom = 316.0
+theme_override_font_sizes/font_size = 16
+text = "Jugar"
+
+[node name="Keybinds" type="Button" parent="Button_Manager" unique_id=1017250187]
+layout_mode = 0
+offset_left = 460.0
+offset_top = 373.0
+offset_right = 556.0
+offset_bottom = 422.0
+theme_override_font_sizes/font_size = 20
+text = "Keybinds"
+
+[connection signal="pressed" from="Button_Manager/Jugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="Button_Manager/Keybinds" to="." method="_on_keybinds_pressed"]
