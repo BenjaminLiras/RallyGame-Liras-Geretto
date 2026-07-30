@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://d2yycd2w8ixb2"]
+[gd_scene load_steps=2 format=3 uid="uid://d2yycd2w8ixb2"]
+
+[ext_resource type="Script" path="res://Scripts/area_2d.gd" id="1_qx0yw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7y7ei"]
 size = Vector2(68, 68)
@@ -6,6 +8,10 @@ size = Vector2(68, 68)
 [sub_resource type="CanvasTexture" id="CanvasTexture_7y7ei"]
 
 [node name="PuntoAcelerar" type="Area2D" unique_id=1319333475]
+script = ExtResource("1_qx0yw")
+tipo_punto = 1
+velocidad_objetivo = 1.0
+mostrar_menu = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1320333793]
 shape = SubResource("RectangleShape2D_7y7ei")
