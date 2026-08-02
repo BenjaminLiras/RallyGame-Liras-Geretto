@@ -4137,15 +4137,19 @@ tile_set = SubResource("TileSet_kln2b")
 [node name="PuntoDecision" parent="Stage" unique_id=394585661 instance=ExtResource("7_50glp")]
 position = Vector2(157.5, 476.25754)
 scale = Vector2(1.4999999, 1.2274678)
+velocidad_objetivo = 0.7
 
 [node name="PuntoDecision3" parent="Stage" unique_id=354469185 instance=ExtResource("7_50glp")]
 position = Vector2(505.50006, 401.38196)
+velocidad_objetivo = 0.5
 
 [node name="PuntoDecision5" parent="Stage" unique_id=1797419483 instance=ExtResource("7_50glp")]
 position = Vector2(1104, 115.38197)
+velocidad_objetivo = 0.5
 
 [node name="PuntoDecision7" parent="Stage" unique_id=531534349 instance=ExtResource("7_50glp")]
 position = Vector2(1158, 436.97858)
+velocidad_objetivo = 0.7
 
 [node name="PuntoAcelerar" parent="Stage" unique_id=1319333475 instance=ExtResource("9_vy5pj")]
 position = Vector2(298.49997, 406.29184)

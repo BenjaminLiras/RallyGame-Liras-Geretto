@@ -5,12 +5,18 @@ extends PathFollow2D
 @export_range(0.5, 8.0, 0.1) var suavizado_aceleracion: float = 2.5
 @export_range(0.5, 8.0, 0.1) var suavizado_frenado: float = 4.0
 @export var danio: float = 100
+@export_range(0.0, 100.0, 1.0) var danio_minimo: float = 0.0
+@export_range(0.0, 100.0, 1.0) var danio_maximo: float = 100.0
+@export_range(1.0, 40.0, 1.0) var castigo_base_atacar: float = 12.0
+@export_range(5.0, 120.0, 1.0) var castigo_por_exceso_velocidad: float = 45.0
 
 @onready var menu_decision = $"../../CanvasLayer/Cartel"
 
 var curva_actual: Area2D = null
 var factor_velocidad_actual: float = 1.0
 var factor_velocidad_objetivo: float = 1.0
+var velocidad_segura_punto_actual: float = 1.0
+var juego_pausado_por_decision: bool = false
 
 enum TipoDecision {
 	ATACAR,
@@ -22,6 +28,8 @@ func _ready() -> void:
 	loop = true
 	factor_velocidad_actual = velocidad_defaul
 	factor_velocidad_objetivo = velocidad_defaul
+	velocidad_segura_punto_actual = velocidad_defaul
+	menu_decision.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	menu_decision.visible = false
 	$Area2D.area_entered.connect(_on_zona_curva_detectada)
 	menu_decision.get_node("Button").pressed.connect(_on_acelerar)
@@ -42,7 +50,7 @@ func _process(delta: float) -> void:
 	
 	
 	progress += velocidad * factor_velocidad_actual * delta
-
+	print(danio)
 	
 func _on_zona_curva_detectada(area: Area2D) -> void:
 	var tipo_punto = area.get("tipo_punto")
@@ -54,30 +62,62 @@ func _on_zona_curva_detectada(area: Area2D) -> void:
 		nueva_velocidad_objetivo = velocidad_defaul
 	
 	if tipo_punto == 1:
+		curva_actual = null
 		factor_velocidad_objetivo = float(nueva_velocidad_objetivo)
 		menu_decision.visible = false
+		reanudar_juego_por_decision()
 		return
 	
-	if curva_actual == null:
-		curva_actual = area
-		factor_velocidad_objetivo = float(nueva_velocidad_objetivo)
-		menu_decision.visible = true
+	curva_actual = area
+	factor_velocidad_objetivo = float(nueva_velocidad_objetivo)
+	velocidad_segura_punto_actual = float(nueva_velocidad_objetivo)
+	menu_decision.visible = bool(area.get("mostrar_menu"))
+	if menu_decision.visible:
+		pausar_juego_por_decision()
 	
 	
 func tomar_decision(modificador_velocidad: float) -> void:
 	factor_velocidad_objetivo = modificador_velocidad
 	curva_actual = null
 	menu_decision.visible = false
+	reanudar_juego_por_decision()
+	
+
+func pausar_juego_por_decision() -> void:
+	if juego_pausado_por_decision:
+		return
+	juego_pausado_por_decision = true
+	get_tree().paused = true
+	
+
+func reanudar_juego_por_decision() -> void:
+	if not juego_pausado_por_decision:
+		return
+	juego_pausado_por_decision = false
+	get_tree().paused = false
+
+
+func recibir_castigo_danio(cantidad: float) -> void:
+	danio -= cantidad
+	if danio < danio_minimo:
+		danio = danio_minimo
+	elif danio > danio_maximo:
+		danio = danio_maximo
+	
+
+func calcular_castigo_atacar() -> float:
+	var exceso_velocidad = max(0.0, factor_velocidad_actual - velocidad_segura_punto_actual)
+	return castigo_base_atacar + (exceso_velocidad * castigo_por_exceso_velocidad)
 	
 	
 func resolver_decision(tipo_decision: TipoDecision) -> void:
 	match tipo_decision:
 		TipoDecision.ATACAR:
-			tomar_decision(0.9)
-			danio -= 10
+			tomar_decision(1.2)
+			recibir_castigo_danio(calcular_castigo_atacar())
 		TipoDecision.MODERAR:
 			tomar_decision(0.7)
-			danio -= 5
+			recibir_castigo_danio(5.0)
 		TipoDecision.CONSERVAR:
 			tomar_decision(0.6)
 		
