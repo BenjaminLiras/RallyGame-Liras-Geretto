@@ -11,12 +11,15 @@ extends PathFollow2D
 @export_range(5.0, 120.0, 1.0) var castigo_por_exceso_velocidad: float = 45.0
 
 @onready var menu_decision = $"../../CanvasLayer/Cartel"
+@onready var detector_area: Area2D = $Area2D
+@onready var sprite_auto: Sprite2D = $Sprite2D
 
 var curva_actual: Area2D = null
 var factor_velocidad_actual: float = 1.0
 var factor_velocidad_objetivo: float = 1.0
 var velocidad_segura_punto_actual: float = 1.0
 var juego_pausado_por_decision: bool = false
+var descalificado_por_demolicion: bool = false
 
 enum TipoDecision {
 	ATACAR,
@@ -38,6 +41,9 @@ func _ready() -> void:
 				
 	
 func _process(delta: float) -> void:
+	if descalificado_por_demolicion:
+		return
+
 	var suavizado_actual = suavizado_frenado
 	if factor_velocidad_objetivo > factor_velocidad_actual:
 		suavizado_actual = suavizado_aceleracion
@@ -53,6 +59,9 @@ func _process(delta: float) -> void:
 	print(danio)
 	
 func _on_zona_curva_detectada(area: Area2D) -> void:
+	if descalificado_por_demolicion:
+		return
+
 	var tipo_punto = area.get("tipo_punto")
 	if tipo_punto == null:
 		return
@@ -69,8 +78,8 @@ func _on_zona_curva_detectada(area: Area2D) -> void:
 		return
 	
 	curva_actual = area
-	factor_velocidad_objetivo = float(nueva_velocidad_objetivo)
-	velocidad_segura_punto_actual = float(nueva_velocidad_objetivo)
+	factor_velocidad_objetivo = nueva_velocidad_objetivo
+	velocidad_segura_punto_actual = nueva_velocidad_objetivo
 	menu_decision.visible = bool(area.get("mostrar_menu"))
 	if menu_decision.visible:
 		pausar_juego_por_decision()
@@ -95,14 +104,34 @@ func reanudar_juego_por_decision() -> void:
 		return
 	juego_pausado_por_decision = false
 	get_tree().paused = false
+	
 
-
-func recibir_castigo_danio(cantidad: float) -> void:
+func recibir_danio(cantidad: float) -> void:
+	if descalificado_por_demolicion:
+		return
+	
 	danio -= cantidad
 	if danio < danio_minimo:
 		danio = danio_minimo
-	elif danio > danio_maximo:
-		danio = danio_maximo
+	
+	if danio <= danio_minimo:
+		descalificar_por_demolicion()
+	
+
+func descalificar_por_demolicion() -> void:
+	if descalificado_por_demolicion:
+		return
+	
+	descalificado_por_demolicion = true
+	reanudar_juego_por_decision()
+	menu_decision.visible = false
+	curva_actual = null
+	factor_velocidad_actual = 0.0
+	factor_velocidad_objetivo = 0.0
+	
+	#Animacion fachera de destruccion del auto
+	var tween = create_tween()
+	tween.tween_property(self, "v_offset", 220.0, 0.6)
 	
 
 func calcular_castigo_atacar() -> float:
@@ -114,10 +143,10 @@ func resolver_decision(tipo_decision: TipoDecision) -> void:
 	match tipo_decision:
 		TipoDecision.ATACAR:
 			tomar_decision(1.2)
-			recibir_castigo_danio(calcular_castigo_atacar())
+			recibir_danio(calcular_castigo_atacar())
 		TipoDecision.MODERAR:
 			tomar_decision(0.7)
-			recibir_castigo_danio(5.0)
+			recibir_danio(5.0)
 		TipoDecision.CONSERVAR:
 			tomar_decision(0.6)
 		
