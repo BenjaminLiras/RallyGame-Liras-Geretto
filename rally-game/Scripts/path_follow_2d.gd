@@ -11,8 +11,8 @@ extends PathFollow2D
 @export_range(5.0, 120.0, 1.0) var castigo_por_exceso_velocidad: float = 45.0
 
 @onready var menu_decision = $"../../CanvasLayer/Cartel"
-@onready var detector_area: Area2D = $Area2D
-@onready var sprite_auto: Sprite2D = $Sprite2D
+
+
 
 var curva_actual: Area2D = null
 var factor_velocidad_actual: float = 1.0
