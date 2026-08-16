@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://d2x2bbv1ewfda"]
+
+[sub_resource type="Animation" id="Animation_3llwt"]
+resource_name = "fade_in"
+
+[sub_resource type="Animation" id="Animation_h40d6"]
+resource_name = "fade_out"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_var0u"]
+_data = {
+&"fade_in": SubResource("Animation_3llwt"),
+&"fade_out": SubResource("Animation_h40d6")
+}
+
+[node name="ColorRect" type="ColorRect" unique_id=1410602643]
+offset_right = 581.0
+offset_bottom = 328.0
+color = Color(0.012617188, 0.012061696, 0.012617188, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=973101628]
+libraries/ = SubResource("AnimationLibrary_var0u")
