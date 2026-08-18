@@ -1,8 +1,13 @@
 extends Path2D
 
-@onready var gestor: GestorMultijugador = $MultiplayerManager
+var gestor: GestorMultijugador = null
 
 func _ready() -> void:
+	gestor = get_tree().root.get_node_or_null("Main/MultiplayerManager")
+	if gestor == null:
+		push_error("No se encontro GestorMultijugador")
+		return
+	
 	var auto_1 = get_node_or_null("prota")
 	var auto_2 = get_node_or_null("Car2")
 

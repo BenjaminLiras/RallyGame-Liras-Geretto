@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bxekqti665sur" path="res://Assets/rallyjapon.png" id="1_r150o"]
 [ext_resource type="Script" uid="uid://yigqo7vd2xjn" path="res://Scripts/stage.gd" id="1_v1gob"]
 [ext_resource type="Script" uid="uid://bkf1umov20b6w" path="res://Scripts/car_2.gd" id="3_pbw6q"]
+[ext_resource type="Script" uid="uid://c0fkjvg6f3yqh" path="res://Scripts/multiplayer_manager.gd" id="4_mm1pq"]
 [ext_resource type="Texture2D" uid="uid://bdc5fcsvpm77c" path="res://Assets/lanciastartosrally7.PNG" id="3_rgh2o"]
 [ext_resource type="PackedScene" uid="uid://df7yvn77qsl38" path="res://Scenes/punto_decision.tscn" id="7_50glp"]
 [ext_resource type="PackedScene" uid="uid://uow3hsp5v1fi" path="res://Scenes/cartel_decision.tscn" id="7_jw32o"]
@@ -4086,6 +4087,9 @@ texture = ExtResource("1_r150o")
 sources/0 = SubResource("TileSetAtlasSource_idj7w")
 
 [node name="Main" type="Node2D" unique_id=1112573599]
+
+[node name="MultiplayerManager" type="Node" parent="." unique_id=4088001]
+script = ExtResource("4_mm1pq")
 
 [node name="Stage" type="Path2D" parent="." unique_id=338677736]
 position = Vector2(28, 53)
