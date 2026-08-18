@@ -10,6 +10,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
+func _on_jugar2_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
 
 func _on_jugar_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main.tscn")

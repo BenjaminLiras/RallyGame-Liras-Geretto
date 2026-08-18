@@ -16,6 +16,20 @@ extends PathFollow2D
 
 var curva_actual: Area2D = null
 var factor_velocidad_actual: float = 1.0
+var decision_pendiente: int = 0  # 0=ATACAR 1=MODERAR 2=CONSERVAR
+
+func _input(event: InputEvent) -> void:
+	if not (event is InputEventKey) or not event.pressed:
+		return
+	if event.keycode == KEY_UP:
+		decision_pendiente = 0
+		print("J1: ATACAR")
+	elif event.keycode == KEY_DOWN:
+		decision_pendiente = 1
+		print("J1: MODERAR")
+	elif event.keycode == KEY_RIGHT:
+		decision_pendiente = 2
+		print("J1: CONSERVAR")
 var factor_velocidad_objetivo: float = 1.0
 var velocidad_segura_punto_actual: float = 1.0
 var juego_pausado_por_decision: bool = false
@@ -80,9 +94,8 @@ func _on_zona_curva_detectada(area: Area2D) -> void:
 	curva_actual = area
 	factor_velocidad_objetivo = nueva_velocidad_objetivo
 	velocidad_segura_punto_actual = nueva_velocidad_objetivo
-	menu_decision.visible = bool(area.get("mostrar_menu"))
-	if menu_decision.visible:
-		pausar_juego_por_decision()
+	resolver_decision(decision_pendiente as TipoDecision)
+	decision_pendiente = 0
 	
 	
 func tomar_decision(modificador_velocidad: float) -> void:
@@ -121,18 +134,22 @@ func recibir_danio(cantidad: float) -> void:
 func descalificar_por_demolicion() -> void:
 	if descalificado_por_demolicion:
 		return
-	
+
 	descalificado_por_demolicion = true
 	reanudar_juego_por_decision()
 	menu_decision.visible = false
 	curva_actual = null
 	factor_velocidad_actual = 0.0
 	factor_velocidad_objetivo = 0.0
-	
+
+	var cam = get_node_or_null("Camera2D")
+	if cam:
+		var car2 = get_tree().root.get_node_or_null("Main/Stage/Car2")
+		if car2:
+			cam.reparent(car2)
+
 	var tween = create_tween()
 	tween.tween_property(self, "v_offset", 220.0, 0.6)
-	
-
 func calcular_castigo_atacar() -> float:
 	var exceso_velocidad = max(0.0, factor_velocidad_actual - velocidad_segura_punto_actual)
 	return castigo_base_atacar + (exceso_velocidad * castigo_por_exceso_velocidad)
