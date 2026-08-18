@@ -1,15 +1,15 @@
 extends Path2D
 
+@onready var gestor: GestorMultijugador = $MultiplayerManager
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	var auto_1 = get_node_or_null("prota")
+	var auto_2 = get_node_or_null("Car2")
 
+	if auto_1 and auto_2:
+		gestor.inicializar_jugadores([auto_1, auto_2])
+	else:
+		push_error("No se encontraron los autos")
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-
-func _on_area_2d_body_entered(body: Node2D) -> void:
+func _process(_delta: float) -> void:
 	pass

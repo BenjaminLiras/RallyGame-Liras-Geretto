@@ -2,7 +2,7 @@ extends Control
 
 class_name MultiplayerUI
 
-@onready var multiplayer_manager: MultiplayerManager = $".."
+@onready var gestor: GestorMultijugador = $".."
 @export var mostrar_debug: bool = true
 
 # Nodos de UI para cada jugador
@@ -114,13 +114,13 @@ func crear_ui() -> void:	# Panel izquierdo para Jugador 1
 	hbox_timer.add_child(label_timer)
 
 func _process(delta: float) -> void:
-	if not multiplayer_manager:
+	if not gestor:
 		return
 	
 	actualizar_ui()
 
 func actualizar_ui() -> void:
-	var estado = multiplayer_manager.obtener_estado_ambos()
+	var estado = gestor.obtener_estado()
 	
 	# Actualizar Jugador 1
 	if "jugador1" in estado and not estado.jugador1.is_empty():

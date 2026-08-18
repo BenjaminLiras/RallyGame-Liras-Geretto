@@ -1,139 +1,137 @@
 extends Node
 
-class_name MultiplayerManager
+class_name GestorMultijugador
 
 @export var velocidad_defaul: float = 1.0
 @export_range(0.5, 8.0, 0.1) var suavizado_aceleracion: float = 2.5
 @export_range(0.5, 8.0, 0.1) var suavizado_frenado: float = 4.0
 
 enum TipoDecision {
-	ATACARR,
-	MODERARR,
-	CONSERVARR,
+	ATACAR,
+	MODERAR,
+	CONSERVAR,
 	NINGUNA
 }
 
 class Jugador:
 	var id: int
-	var pathfollow: PathFollow2D
+	var nodo: PathFollow2D
 	var decision_previa: int = 3
 	var decidio: bool = false
-	var spd_act: float = 1.0
-	var spd_obj: float = 1.0
-	var spd_safe: float = 1.0
-	var hp: float = 100.0
-	var dead: bool = false
-	var ya_proceso_zona: bool = false
+	var vel_actual: float = 1.0
+	var vel_objetivo: float = 1.0
+	var vel_segura: float = 1.0
+	var vida: float = 100.0
+	var muerto: bool = false
+	var zona_procesada: bool = false
 
 	func _init(pid: int, pf: PathFollow2D) -> void:
 		id = pid
-		pathfollow = pf
+		nodo = pf
 
-var players: Array[Jugador] = []
+var jugadores: Array[Jugador] = []
 
 func _ready() -> void:
 	pass
 
-func inicializar_jugadores(pathfollows: Array[PathFollow2D]) -> void:
-	if pathfollows.size() < 2:
-		push_error("ERROR: necesito 2 paths")
+func inicializar_jugadores(nodos: Array[PathFollow2D]) -> void:
+	if nodos.size() < 2:
+		push_error("ERROR: se necesitan 2 autos")
 		return
-	players.append(Jugador.new(1, pathfollows[0]))
-	players.append(Jugador.new(2, pathfollows[1]))
-        for p in players:
-                p.spd_act = velocidad_defaul
-                p.spd_obj = velocidad_defaul
-                p.spd_safe = velocidad_defaulfunc _process(delta: float) -> void:
-	for p in players:
-		if not p.dead:
-			mov_jugador(p, delta)
+	jugadores.append(Jugador.new(1, nodos[0]))
+	jugadores.append(Jugador.new(2, nodos[1]))
+	for j in jugadores:
+		j.vel_actual = velocidad_defaul
+		j.vel_objetivo = velocidad_defaul
+		j.vel_segura = velocidad_defaul
 
-func _input(event: InputEvent) -> void:
-	if not (event is InputEventKey) or not event.pressed:
+func _process(delta: float) -> void:
+	for j in jugadores:
+		if not j.muerto:
+			mover_jugador(j, delta)
+
+func _input(evento: InputEvent) -> void:
+	if not (evento is InputEventKey) or not evento.pressed:
 		return
-	for p in players:
-		if p.dead:
+	for j in jugadores:
+		if j.muerto:
 			continue
-		if p.id == 1:
-			if event.keycode == KEY_UP:
-				p.decision_previa = 0
-				p.decidio = true
-				print("J1 ATACAR")
+		if j.id == 1:
+			if evento.keycode == KEY_UP:
+				j.decision_previa = 0
+				j.decidio = true
 				return
-			elif event.keycode == KEY_DOWN:
-				p.decision_previa = 1
-				p.decidio = true
-				print("J1 MODERAR")
+			elif evento.keycode == KEY_DOWN:
+				j.decision_previa = 1
+				j.decidio = true
 				return
-		if p.id == 2:
-			if event.keycode == KEY_W:
-				p.decision_previa = 0
-				p.decidio = true
-				print("J2 ATACAR")
+		if j.id == 2:
+			if evento.keycode == KEY_W:
+				j.decision_previa = 0
+				j.decidio = true
 				return
-			elif event.keycode == KEY_S:
-				p.decision_previa = 1
-				p.decidio = true
-				print("J2 MODERAR")
+			elif evento.keycode == KEY_S:
+				j.decision_previa = 1
+				j.decidio = true
 				return
 
-func check_zona_colision(p: Jugador) -> void:
-	if p.ya_proceso_zona:
+func revisar_zona(j: Jugador) -> void:
+	if j.zona_procesada:
 		return
-	if not p.decidio:
-		p.decision_previa = 3
-	p.ya_proceso_zona = true
-	exec_decision(p)
+	if not j.decidio:
+		j.decision_previa = 3
+	j.zona_procesada = true
+	ejecutar_decision(j)
 
-func exec_decision(p: Jugador) -> void:
-	if p.dead:
+func ejecutar_decision(j: Jugador) -> void:
+	if j.muerto:
 		return
-	match p.decision_previa:
+	match j.decision_previa:
 		0:
-			p.spd_obj = 1.2
-			hurt(p, calc_dmg_attack(p))
+			j.vel_objetivo = 1.2
+			recibir_danio(j, calcular_danio_ataque(j))
 		1:
-			p.spd_obj = 0.7
-			hurt(p, 5.0)
+			j.vel_objetivo = 0.7
+			recibir_danio(j, 5.0)
 		2:
-			p.spd_obj = 0.6
+			j.vel_objetivo = 0.6
 		3:
-			p.spd_obj = 0.5
-			hurt(p, 10.0)
-	p.decidio = false
+			j.vel_objetivo = 0.5
+			recibir_danio(j, 10.0)
+	j.decidio = false
 
-func calc_dmg_attack(p: Jugador) -> float:
-	var excess = max(0.0, p.spd_act - p.spd_safe)
-	return 12.0 + (excess * 45.0)
+func calcular_danio_ataque(j: Jugador) -> float:
+	var exceso = max(0.0, j.vel_actual - j.vel_segura)
+	return 12.0 + (exceso * 45.0)
 
-func hurt(p: Jugador, dmg: float) -> void:
-	p.hp -= dmg
-	if p.hp < 0.0:
-		p.hp = 0.0
-	if p.hp <= 0.0:
-		die(p)
+func recibir_danio(j: Jugador, cantidad: float) -> void:
+	j.vida -= cantidad
+	if j.vida < 0.0:
+		j.vida = 0.0
+	if j.vida <= 0.0:
+		eliminar_jugador(j)
 
-func die(p: Jugador) -> void:
-	if p.dead:
+func eliminar_jugador(j: Jugador) -> void:
+	if j.muerto:
 		return
-	p.dead = true
-	p.spd_act = 0.0
-	p.spd_obj = 0.0
-	var tw = create_tween()
-	tw.tween_property(p.pathfollow, "v_offset", 220.0, 0.6)
+	j.muerto = true
+	j.vel_actual = 0.0
+	j.vel_objetivo = 0.0
+	var animacion = create_tween()
+	animacion.tween_property(j.nodo, "v_offset", 220.0, 0.6)
 
-func mov_jugador(p: Jugador, dt: float) -> void:
-	var smooth = suavizado_frenado
-	if p.spd_obj > p.spd_act:
-		smooth = suavizado_aceleracion
-	p.spd_act = move_toward(p.spd_act, p.spd_obj, smooth * dt)
-	p.pathfollow.progress += 300 * p.spd_act * dt
+func mover_jugador(j: Jugador, delta: float) -> void:
+	var suavizado = suavizado_frenado
+	if j.vel_objetivo > j.vel_actual:
+		suavizado = suavizado_aceleracion
+	j.vel_actual = move_toward(j.vel_actual, j.vel_objetivo, suavizado * delta)
+	j.nodo.progress += 300 * j.vel_actual * delta
 
-func get_p_state(pid: int) -> Dictionary:
-	for p in players:
-		if p.id == pid:
-			return {"id": p.id, "hp": p.hp, "vel": p.spd_act, "muerto": p.dead, "decision": p.decision_previa}
+func obtener_estado_jugador(pid: int) -> Dictionary:
+	for j in jugadores:
+		if j.id == pid:
+			return {"id": j.id, "vida": j.vida, "velocidad": j.vel_actual, "muerto": j.muerto, "decision": j.decision_previa}
 	return {}
 
-func get_state() -> Dictionary:
-	return {"p1": get_p_state(1), "p2": get_p_state(2)}
+func obtener_estado() -> Dictionary:
+	return {"jugador1": obtener_estado_jugador(1), "jugador2": obtener_estado_jugador(2)}
