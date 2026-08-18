@@ -129,7 +129,6 @@ func descalificar_por_demolicion() -> void:
 	factor_velocidad_actual = 0.0
 	factor_velocidad_objetivo = 0.0
 	
-	#Animacion fachera de destruccion del auto
 	var tween = create_tween()
 	tween.tween_property(self, "v_offset", 220.0, 0.6)
 	
